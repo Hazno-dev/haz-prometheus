@@ -506,10 +506,10 @@ __int64 __fastcall manager_14_init_hook(__int64 manager) {
 typedef Entity* (__fastcall* load_entity_fn)(EntityAdminBase*, int* entid, EntityLoader*);
 load_entity_fn emplace_entity_orig;
 Entity* emplace_entity_hook(EntityAdminBase* ea, int* entid, EntityLoader* loader) {
-    if (loader->stu_id == 0x400000000000433 ||
-        loader->stu_id == 0x04000000000001BE || 
-        loader->stu_id == 0x0400000000000254 ||
-        loader->stu_id == 0x0400000000000255) {
+    if (loader->stu_id == 0x400000000000433 || //bigass boat on Gibraltar
+        loader->stu_id == 0x04000000000001BE || //Spawn no entry grill
+        loader->stu_id == 0x0400000000000254 || //Spawn no entry grill
+        loader->stu_id == 0x0400000000000255) { //Spawn no entry grill
         for (auto& item : loader->loader_entries)
             item.component_id = 0;
     }

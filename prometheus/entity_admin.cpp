@@ -513,12 +513,13 @@ demo_move s_demo_moves[] = {
 
 	demo_move{ demo_move::typ::join_game, nullptr, 0 }
 };
-//volskaya zu lang, musik bevor kr
+
 struct lineup {
 	__int64 hero;
 	Vector4 position;
 	Vector4 rotation;
 };
+
 auto s_lineups = std::vector<lineup>{
 	lineup(0x400000000000dd7, Vector4(19.110352, -5.095703, -88.195312, 0), Vector4(0.000000, 0.993958, 0.000000, 0)),
 	lineup(0x40000000000063c, Vector4(-12.725586, 0.085938, -152.776367, 0), Vector4(0.000000, 0.996279, 0.000000, 0)),
@@ -1159,6 +1160,10 @@ void PrometheusSystem::OnTick(float tick) {
 			auto tell_statescript_this_is_localent = (void(__fastcall*)(Entity*, uint*))(globals::gameBase + 0xd07830);
 			tell_statescript_this_is_localent(model, &controller->entity_id);
 
+			if (globals::isDemo) {
+				spawn_pachis();
+			}
+
 			_newly_added_entities.erase(it);
 			continue;
 		}
@@ -1184,9 +1189,7 @@ void PrometheusSystem::OnTick(float tick) {
 			}
 			
 			if (globals::isDemo) {
-				for (int i = 0; i < 5; i++) {
-					spawn_pachis();
-				}
+
 			}
 		}
 		else if (_world->world_state == 5) {

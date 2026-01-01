@@ -130,6 +130,10 @@ namespace allmighty_hash_lib {
 		try {
 			nlohmann::json json;
 			{
+				if (!std::filesystem::exists(filename)) {
+					will_save = true;
+					return;
+				}
 				std::ifstream input_file(filename);
 				if (!input_file.is_open()) {
 					printf("Failed to open input hash file.");

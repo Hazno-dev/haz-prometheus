@@ -61,8 +61,8 @@ struct StatescriptRTTI
 {
 	StatescriptRTTI* next_instance;
 	__int64 field_8;                      ///< reference to factory func?
-	__int64* (*factory_func)();
-	InheritanceInfo* stuclass_inherit;
+	__int64* (*factory_func)(); //Factory function for the implementation class.
+	InheritanceInfo* stuclass_inherit; //Inheritance for the STU data.
 	__int32 field_20;                     ///< zero
 	__int32 field_24;
 	__int64 field_28;                     ///< 0x1854d20 bei stustatescriptstatewait
