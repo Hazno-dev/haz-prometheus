@@ -1,13 +1,6 @@
 {
   "dependencies": [
     "minhook",
-    "keystone",
-    {
-      "name": "capstone",
-      "features": [
-        "x86"
-      ]
-    },
     {
       "name": "imgui",
       "features": [
