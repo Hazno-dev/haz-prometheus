@@ -191,3 +191,7 @@ Also dont look into the window manager. Its an abomination. You have been warned
 # 8. License and Contact
 
 MIT License. Contact me for any questions at contact@breakingbread.at or open a discussion thread <3
+
+
+
+![prometheus logo](images/prometheus.png)
