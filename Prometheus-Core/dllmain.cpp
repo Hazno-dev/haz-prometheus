@@ -50,6 +50,8 @@
 //Who needs a build system?
 #include <imnodes/imnodes.cpp>
 
+#include "Log/Logs.h"
+
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ImVec2, x, y);
 
 struct memmgr;
@@ -1153,52 +1155,72 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 )
 {
     static std::once_flag entrypoint_mutex;
-    std::call_once(entrypoint_mutex, [] {
-        globals::ensure_console_allocated();
-        printf("Hello World!\n");
+    static std::once_flag exitpoint_mutex;
+    switch (ul_reason_for_call) {
+        case DLL_PROCESS_ATTACH:
+            std::call_once(entrypoint_mutex, [] {
+                globals::ensure_console_allocated();
+                Logs::Initialize(); //soz i defo shouldnt be putting this inside dllmain but like idk where else to put it rn
 
-        printf("Adding VEH: %p\n", AddVectoredExceptionHandler(true, (PVECTORED_EXCEPTION_HANDLER)VectoredExceptionHandler));
-        globals::gameBase = (DWORD_PTR)GetModuleHandleA(nullptr);
-        globals::modBase = (DWORD_PTR)GetCurrentModule();
-        const auto pe = Pe::PeNative::fromModule(GetModuleHandleA(NULL));
-        globals::gameSize = pe.imageSize();
-        const auto modpe = Pe::PeNative::fromModule(GetCurrentModule());
-        globals::modSize = modpe.imageSize();
-        printf("Module Base: %p %p\n", globals::modBase, globals::modSize);
-        printf("Game Base: %p %p\n", globals::gameBase, globals::gameSize);
-        mainThreadId = GetCurrentThreadId();
-        printf("Main Thread: %d (%x)\n", mainThreadId, mainThreadId);
-        printf("Patching back TLSCallback0 at %p!\n");
-        DWORD_PTR tlsCallback = TlsCallback_Addr + globals::gameBase;
-        DWORD old;
-        VirtualProtect((void*)(tlsCallback), sizeof(TlsCallback_0), PAGE_EXECUTE_READWRITE, &old);
-        memcpy((void*)tlsCallback, TlsCallback_0, sizeof(TlsCallback_0));
+                printf("Hello World!\n");
 
-        MH_VERIFY(MH_Initialize());
+                printf("Adding VEH: %p\n", AddVectoredExceptionHandler(true, (PVECTORED_EXCEPTION_HANDLER)VectoredExceptionHandler));
+                globals::gameBase = (DWORD_PTR)GetModuleHandleA(nullptr);
+                globals::modBase = (DWORD_PTR)GetCurrentModule();
+                const auto pe = Pe::PeNative::fromModule(GetModuleHandleA(NULL));
+                globals::gameSize = pe.imageSize();
+                const auto modpe = Pe::PeNative::fromModule(GetCurrentModule());
+                globals::modSize = modpe.imageSize();
+                printf("Module Base: %p %p\n", globals::modBase, globals::modSize);
+                printf("Game Base: %p %p\n", globals::gameBase, globals::gameSize);
+                mainThreadId = GetCurrentThreadId();
+                printf("Main Thread: %d (%x)\n", mainThreadId, mainThreadId);
+                printf("Patching back TLSCallback0 at %p!\n");
+                DWORD_PTR tlsCallback = TlsCallback_Addr + globals::gameBase;
+                DWORD old;
+                VirtualProtect((void*)(tlsCallback), sizeof(TlsCallback_0), PAGE_EXECUTE_READWRITE, &old);
+                memcpy((void*)tlsCallback, TlsCallback_0, sizeof(TlsCallback_0));
 
-        MH_VERIFY(MH_CreateHook(ExitProcess, ExitProcessHook, (LPVOID*)&ExitProcess_orig));
-        MH_VERIFY(MH_EnableHook(ExitProcess));
+                MH_VERIFY(MH_Initialize());
 
-        auto addVeh = GetProcAddress(LoadLibraryA("ntdll.dll"), "RtlAddVectoredExceptionHandler");
-        MH_VERIFY(MH_CreateHook(addVeh, AddVehHook, (LPVOID*)&AddVeh_orig));
-        MH_VERIFY(MH_EnableHook(addVeh));
+                MH_VERIFY(MH_CreateHook(ExitProcess, ExitProcessHook, (LPVOID*)&ExitProcess_orig));
+                MH_VERIFY(MH_EnableHook(ExitProcess));
 
-        MH_VERIFY(MH_CreateHook(IsDebuggerPresent, CheckDebuggerPresentHook, 0));
-        MH_VERIFY(MH_EnableHook(IsDebuggerPresent));
+                auto addVeh = GetProcAddress(LoadLibraryA("ntdll.dll"), "RtlAddVectoredExceptionHandler");
+                MH_VERIFY(MH_CreateHook(addVeh, AddVehHook, (LPVOID*)&AddVeh_orig));
+                MH_VERIFY(MH_EnableHook(addVeh));
 
-        MH_VERIFY(MH_CreateHook(CheckRemoteDebuggerPresent, CheckDebuggerPresentHook, 0));
-        MH_VERIFY(MH_EnableHook(CheckRemoteDebuggerPresent));
+                MH_VERIFY(MH_CreateHook(IsDebuggerPresent, CheckDebuggerPresentHook, 0));
+                MH_VERIFY(MH_EnableHook(IsDebuggerPresent));
 
-        printf("Creating WinMain Hook...\n");
-        char starthook[] = {
-            0x48, 0xB8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //mov rax,0
-            0xFF, 0xE0 //jmp rax
-        };
-        VirtualProtect((void*)(globals::gameBase + Start_Addr), sizeof(starthook), PAGE_EXECUTE_READWRITE, &old);
-        memcpy((void*)(globals::gameBase + Start_Addr), starthook, sizeof(starthook));
-        DWORD_PTR thatAddr = (DWORD_PTR)&StartHook;
-        memcpy((void*)(globals::gameBase + Start_Addr + 2), (void*)&thatAddr, 8);
-        });
+                MH_VERIFY(MH_CreateHook(CheckRemoteDebuggerPresent, CheckDebuggerPresentHook, 0));
+                MH_VERIFY(MH_EnableHook(CheckRemoteDebuggerPresent));
+
+                printf("Creating WinMain Hook...\n");
+                char starthook[] = {
+                    0x48, 0xB8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //mov rax,0
+                    0xFF, 0xE0 //jmp rax
+                };
+                VirtualProtect((void*)(globals::gameBase + Start_Addr), sizeof(starthook), PAGE_EXECUTE_READWRITE, &old);
+                memcpy((void*)(globals::gameBase + Start_Addr), starthook, sizeof(starthook));
+                DWORD_PTR thatAddr = (DWORD_PTR)&StartHook;
+                memcpy((void*)(globals::gameBase + Start_Addr + 2), (void*)&thatAddr, 8);
+            });
+            break;
+        case DLL_PROCESS_DETACH:
+            std::call_once(exitpoint_mutex, [] {
+                printf("Goodbye World!\n");
+                MH_VERIFY(MH_Uninitialize());
+                Logs::Uninitialize();
+                });
+            break;
+        case DLL_THREAD_ATTACH:
+        case DLL_THREAD_DETACH:
+        default:
+            break;
+    }
+
+
     return TRUE;
 }
 

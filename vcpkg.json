@@ -1,20 +1,22 @@
 {
+  "builtin-baseline": "e3ed41868d5034bc608eaaa58383cd6ecdbb5ffb",
   "dependencies": [
-    "minhook",
+    "fast-cpp-csv-parser",
+    "freetype",
     {
       "name": "imgui",
       "features": [
+        "docking-experimental",
         "dx11-binding",
-        "win32-binding",
         "freetype",
         "wchar32",
-        "docking-experimental"
+        "win32-binding"
       ]
     },
-    "freetype",
+    "ixwebsocket",
+    "minhook",
     "nlohmann-json",
-    "fast-cpp-csv-parser",
-    "ixwebsocket"
-  ],
-  "builtin-baseline": "c5ff0f76a2212d49e92f02b510cc7509e7e119ef"
+    "spdlog",
+    "fmt"
+  ]
 }

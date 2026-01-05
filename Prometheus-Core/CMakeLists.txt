@@ -139,6 +139,8 @@ add_library(Prometheus-Core SHARED
         "windows/viewmodel_write_blocker.cpp"
         "window_manager/management_window.cpp"
         "window_manager/window_manager.cpp"
+        Log/Logs.cpp
+        Log/Logs.h
 )
 target_include_directories(Prometheus-Core PRIVATE ${PROJECT_SOURCE_DIR}/)
 
@@ -170,6 +172,12 @@ target_link_libraries(Prometheus-Core PRIVATE ixwebsocket::ixwebsocket)
 
 find_package(imgui CONFIG REQUIRED)
 target_link_libraries(Prometheus-Core PRIVATE imgui::imgui)
+
+find_package(fmt CONFIG REQUIRED)
+target_link_libraries(Prometheus-Core PRIVATE fmt::fmt)
+
+find_package(spdlog CONFIG REQUIRED)
+target_link_libraries(Prometheus-Core PRIVATE spdlog::spdlog)
 #get_target_property(IMGUI_INCLUDE_DIRS imgui::imgui
 #        INTERFACE_INCLUDE_DIRECTORIES
 #)
