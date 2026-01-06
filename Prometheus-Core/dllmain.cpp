@@ -1159,8 +1159,13 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     switch (ul_reason_for_call) {
         case DLL_PROCESS_ATTACH:
             std::call_once(entrypoint_mutex, [] {
+                //Allow loading from our subfolder
+                SetDefaultDllDirectories(LOAD_LIBRARY_SEARCH_DEFAULT_DIRS | LOAD_LIBRARY_SEARCH_USER_DIRS);
+                AddDllDirectory(L"...\\Prometheus");
+
                 globals::ensure_console_allocated();
                 Logs::Initialize(); //soz i defo shouldnt be putting this inside dllmain but like idk where else to put it rn
+
 
                 printf("Hello World!\n");
 

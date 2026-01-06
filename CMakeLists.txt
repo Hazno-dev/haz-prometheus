@@ -10,4 +10,13 @@ include_directories(external)
 include(CMake/Configure.cmake)
 include(CMake/Version.cmake)
 
+#Core
 add_subdirectory(Prometheus-Core)
+
+#Patcher (can just build from vs/rider tho)
+add_custom_target("Prometheus-Patcher"
+        COMMAND dotnet restore
+        COMMAND ${CMAKE_VS_MSBUILD_COMMAND} ${CMAKE_SOURCE_DIR}/Prometheus-Patcher/Prometheus-Patcher.sln /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform="x64"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Prometheus-Patcher
+        COMMENT "Building patcher..."
+)

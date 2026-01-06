@@ -174,10 +174,10 @@ find_package(imgui CONFIG REQUIRED)
 target_link_libraries(Prometheus-Core PRIVATE imgui::imgui)
 
 find_package(fmt CONFIG REQUIRED)
-target_link_libraries(Prometheus-Core PRIVATE fmt::fmt)
+target_link_libraries(Prometheus-Core PRIVATE fmt::fmt-header-only)
 
 find_package(spdlog CONFIG REQUIRED)
-target_link_libraries(Prometheus-Core PRIVATE spdlog::spdlog)
+target_link_libraries(Prometheus-Core PRIVATE spdlog::spdlog_header_only)
 #get_target_property(IMGUI_INCLUDE_DIRS imgui::imgui
 #        INTERFACE_INCLUDE_DIRECTORIES
 #)
