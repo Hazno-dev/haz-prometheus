@@ -77,8 +77,8 @@ public:
 	}
 
 	inline void printItem(JamMessageItemInfo* item) {
-		ImGui::PushID(item);
 		ImGui::TableNextRow();
+		ImGui::PushID(item);
 		ImGui::TableNextColumn();
 		ImGui::Text("%s", item->name_str);
 
@@ -98,11 +98,14 @@ public:
 		display_addr((__int64)item->inner_data_ptr);
 
 		ImGui::TableNextColumn();
+		ImGui::PushID(ImGui::TableGetColumnIndex());
 		display_addr((__int64)item->decoding_func);
+		ImGui::PopID();
+		ImGui::PopID();
 
 		if (item->inner_data_ptr) {
 			ImGui::EndTable();
-			ImGui::PushID(item->inner_data_ptr);
+			ImGui::PushID(item->inner_data_ptr + 1);
 			char header_label[64];
 			const char id_label[] = "=> ID";
 			auto isId = ((__int64)item->inner_data_ptr - globals::gameBase) == 0x172c910;
@@ -127,12 +130,12 @@ public:
 			ImGui::PopID();
 			imgui_helpers::beginTable(tableName, 7);
 		}
-		ImGui::PopID();
 	}
 
 	inline void render() override {
 		if (open_window()) {
 			for (JamMessage* message : _messages) {
+				ImGui::PushID(message);
 				auto info = message->vfptr->get_message_info();
 				char separator_buf[128];
 				sprintf_s(separator_buf, "%p (%x | %x): %s", message, info->message_protocol, info->message_id, info->message_name == nullptr ? "(UNK)" : info->message_name);
@@ -160,6 +163,7 @@ public:
 				}
 
 				ImGui::NewLine(); ImGui::NewLine(); ImGui::NewLine();
+				ImGui::PopID();
 			}
 			if (imgui_helpers::CenteredButton("Close")) {
 				queue_deletion();

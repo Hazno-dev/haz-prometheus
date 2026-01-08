@@ -98,6 +98,7 @@ void entity_window::render() {
 		}*/
 		if (ImGui::BeginChild("ents", ImVec2(-10, -10), ImGuiChildFlags_Borders)) {
 			if (_entity_admin && !IsBadReadPtr((LPVOID)_entity_admin, 8)) {
+				ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(10.0f, 10.0f));
 				if (imgui_helpers::beginTable("Entities", { "ID", "Addr", "Components" })) {
 					EntityListItem* entities = _entity_admin->entity_list_array;
 					for (int i = 0; i < 0x1000; i++) {
@@ -108,6 +109,7 @@ void entity_window::render() {
 					}
 					ImGui::EndTable();
 				}
+				ImGui::PopStyleVar();
 			}
 		}
 		ImGui::EndChild();
@@ -136,33 +138,45 @@ void entity_window::render_entity(Entity* ent, int depth) {
 	if (!_search.found_needle(ent))
 		return;
 	ImGui::PushID(ent);
-	ImGui::TableNextRow();
+
+	auto sceneRendering = ent->getById<Component_1_SceneRendering>(1);
+	ImGui::TableNextRow(0, sceneRendering ? 220.0f : 50.0f);
 
 	ImGui::TableNextColumn();
 	for (int i = 0; i < depth; i++) {
 		ImGui::Bullet();
 		ImGui::SameLine();
 	}
+	ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255,188,255,255));
 	ImGui::Text("%x", ent->entity_id);
-	ImGui::SameLine();
+	ImGui::PopStyleColor();
+
 	if (ImGui::Button("Del")) {
 		_entity_admin->delEnt(ent);
 	}
 
 	if (_is_gameEA) {
+		ImGui::SameLine();
 		if (ImGui::Button("Render")) {
 			entity_bounds_renderer::create(this)->set(ent);
 		}
+		ImGui::SameLine();
 		if (ImGui::Button("Set Local")) {
 			_entity_admin->local_entid = ent->entity_id;
 		}
 	}
 
-	auto sceneRendering = ent->getById<Component_1_SceneRendering>(1);
 	if (sceneRendering) {
 		bool is_visible = sceneRendering->IsVisible();
-		if (ImGui::Button("A"))
+
+		ImGui::SameLine();
+		if (ImGui::Button("A")) {
 			imgui_helpers::openCopyWindow((__int64)&sceneRendering->rendering_flags);
+		}
+
+		ImGui::Separator();
+		ImGui::Dummy(ImVec2(0.0f, 5.0f));
+
 		if (ImGui::Checkbox("Is Visible", &is_visible)) {
 			if (is_visible) {
 				sceneRendering->SetInvisible();
@@ -171,6 +185,7 @@ void entity_window::render_entity(Entity* ent, int depth) {
 				sceneRendering->SetVisible();
 			}
 		}
+
 		if (sceneRendering->scaling.X == sceneRendering->scaling.Y == sceneRendering->scaling.Z) {
 			ImGui::Text("scale: %f", sceneRendering->scaling.X);
 		}
@@ -241,6 +256,7 @@ void entity_window::render_entity(Entity* ent, int depth) {
 			imgui_helpers::openCopyWindow(buf);
 		}
 
+		ImGui::SameLine();
 		if (ImGui::Button(EMOJI_COPY " rot")) {
 			char buf[128];
 			sprintf_s(buf, "Vector4(%f, %f, %f, 0)", sceneRendering->rotation.X, sceneRendering->rotation.Y, sceneRendering->rotation.Z);
@@ -255,6 +271,9 @@ void entity_window::render_entity(Entity* ent, int depth) {
 
 	ImGui::TableNextColumn();
 	display_addr((__int64)ent);
+
+	ImGui::NewLine();
+
 	ImGui::PushID("resload-1");
 	if (ent->resload_entry->valid()) {
 		auto resload_ent = ent->resload_entry->align();

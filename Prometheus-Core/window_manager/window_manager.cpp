@@ -390,14 +390,18 @@ void window::display_addr(__int64 addr, const char* prepend) {
 }
 
 void window::display_text(char* text, const char* prepend) {
+	ImGui::PushID(reinterpret_cast<int64>(text) + reinterpret_cast<int64>(prepend));
+
 	if (prepend)
 		ImGui::Text("%s: %s", prepend, text);
 	else
 		ImGui::Text("%s", text);
-	ImGui::SameLine();
+
 	if (text != nullptr && ImGui::Button("Copy")) {
 		imgui_helpers::openCopyWindow(text);
 	}
+
+	ImGui::PopID();
 }
 
 //std::shared_ptr<window> window::get_root_dock() {
@@ -658,10 +662,11 @@ namespace imgui_helpers {
 	}
 
 	bool display_type(__int64 type, bool color, bool edit, bool hash_show, std::set<__int64> ptrs) {
-		ImGui::PushID(type);
 		if (ptrs.find(type) != ptrs.end()) {
 			return false;
 		}
+
+		ImGui::PushID(type);
 		ptrs.emplace(type);
 		bool hover = false;
 		if (edit) {
