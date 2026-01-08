@@ -12,6 +12,7 @@
 #include "state_replicator.h"
 #include "serialization.h"
 #include "demo_cammoves.cpp"
+#include "Logs/Logs.h"
 
 __int64 PrometheusSystem::get_inheritance() {
 	return NULL;
@@ -686,10 +687,11 @@ void PrometheusSystem::OnTick(float tick) {
 				*(float*)&health_cv.value = health_max;
 				ss->ss_inner.rid_entity_varbag->SetVar({ StatescriptVar_ENTITY_VARBAG, 0x0D800000000006C9 }, health_cv);
 
-				StatescriptPrimitive wpn_1{};
-				wpn_1.type = StatescriptPrimitive_INT;
-				wpn_1.value = 1;
-				ss->ss_inner.rid_entity_varbag->SetArray({ 0x0D8000000000001D }, wpn_1, wpn_1, 0);
+				//Naming is a COMPLETE guess. When this is 1 the statescript component does not add the "spectator" graph. Assuming 1 == alive?
+				StatescriptPrimitive alive{};
+				alive.type = StatescriptPrimitive_BYTE;
+				alive.value = 1;
+				ss->ss_inner.rid_entity_varbag->SetVar({ StatescriptVar_ENTITY_VARBAG, 0xd8000000000094c }, alive);
 			}
 		}
 	}
@@ -1157,7 +1159,7 @@ void PrometheusSystem::OnTick(float tick) {
 				}
 			}
 
-			auto tell_statescript_this_is_localent = (void(__fastcall*)(Entity*, uint*))(globals::gameBase + 0xd07830);
+			auto tell_statescript_this_is_localent = (uint64(__fastcall*)(Entity*, uint*))(globals::gameBase + 0xd07830);
 			tell_statescript_this_is_localent(model, &controller->entity_id);
 
 			if (globals::isDemo) {

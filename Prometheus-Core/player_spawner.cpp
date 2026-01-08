@@ -3,6 +3,7 @@
 #include "stu_resources.h"
 #include "Statescript.h"
 #include "StatescriptVar.h"
+#include "Logs/Logs.h"
 
 void player_spawner::modify_ent(spawn_info info, Entity* ent) {
 	auto game_ea = GameEntityAdmin();
@@ -85,10 +86,31 @@ void player_spawner::modify_ent(spawn_info info, Entity* ent) {
 			auto component_map = entity_def.get_argument_map("m_componentMap");
 			auto weapon_comp = ((STUBase<>*)component_map.value->get_by_key(stringHash("STUWeaponComponent"))->value)->to_editable(); //
 			statescript->loadScript(weapon_comp.get_argument_resource("m_managerScript")->resource_id);
+
+			//filler stub for the entry to 0x0D8000000000001D (valid weapon idxs dict)
+			const StatescriptPrimitive wpnDictionaryBotox{0, StatescriptPrimitive_INT};
+			statescript->ss_inner.rid_entity_varbag->SetArray({0x0D8000000000001D, StatescriptVar_ENTITY_VARBAG}, wpnDictionaryBotox, wpnDictionaryBotox, 1);
+
+			auto weaponId = 1;
 			for (auto weapon : weapon_comp.get_argument_objectlist("m_weapons")) {
-				auto script = weapon.get_argument_resource("m_script"); //m_graph is always null?
-				if (script->has_resource())
+				if (auto script = weapon.get_argument_resource("m_script"); script->has_resource()) {
 					statescript->loadScript(script->resource_id);
+
+					if (auto inst = statescript->ss_inner.getByResourceId(script->resource_id)) {
+						LOG_INFO("Successfully created weapon script: {:#x} (inst: {:#x}) with TargetID {}", script->resource_id, reinterpret_cast<int64>(inst), weaponId);
+
+						//Fix selected weapon targetIDs for weapon graphs (0xd8000000000001c)
+						const StatescriptPrimitive selectedWeaponTargetID{weaponId, StatescriptPrimitive_INT};
+						inst->rid_instance_varbag->SetVar({ StatescriptVar_INSTANCE_VARBAG, 0xd8000000000001c }, selectedWeaponTargetID);
+
+						//Fix weapon IDx array for weapon switching.
+						const StatescriptPrimitive wpnDictionaryId{weaponId++, StatescriptPrimitive_INT};
+						statescript->ss_inner.rid_entity_varbag->SetArray({0x0D8000000000001D, StatescriptVar_ENTITY_VARBAG}, wpnDictionaryId, wpnDictionaryId, weaponId);
+					} else {
+						LOG_ERROR("Failed to create weapon script: {:#x}", script->resource_id);
+						weaponId++;
+					}
+				}
 			}
 		}
 
@@ -97,11 +119,6 @@ void player_spawner::modify_ent(spawn_info info, Entity* ent) {
 			cv.type = StatescriptPrimitive_BYTE;
 			cv.value = 1;
 			statescript->ss_inner.rid_entity_varbag->SetVar({ StatescriptVar_ENTITY_VARBAG, 0x0D800000000000FD }, cv);
-
-			StatescriptPrimitive wpn_1{}; //One weapon active -> SECONDARY WEAPONS DONT WORK
-			wpn_1.type = StatescriptPrimitive_INT;
-			wpn_1.value = 1;
-			statescript->ss_inner.rid_entity_varbag->SetArray({ StatescriptVar_ENTITY_VARBAG, 0x0D8000000000001D }, wpn_1, wpn_1, -1);
 		}
 	}
 

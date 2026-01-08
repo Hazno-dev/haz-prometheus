@@ -4,6 +4,8 @@
 #include <mutex>
 #include <functional>
 
+#include "Logs/Logs.h"
+
 class statescript_logger {
 public:
     struct LogStruct {

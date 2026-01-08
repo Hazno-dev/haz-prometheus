@@ -44,6 +44,10 @@ struct StatescriptPrimitive {
 	__int32 field_8;
 	StatescriptPrimitive_Type type;
 
+	StatescriptPrimitive() : value(0), field_8(0), type(){} //just some handy constructors.
+	StatescriptPrimitive(const int64 value, const StatescriptPrimitive_Type type) : value(value), field_8(0), type(type){}
+	StatescriptPrimitive(const int64 value, const int32 f8, const StatescriptPrimitive_Type type) : value(value), field_8(f8), type(type){}
+
 	std::string get_type_str();
 	std::string get_value_str();
 	StatescriptPrimitive clone();
@@ -66,7 +70,7 @@ struct StatescriptRTTI
 	__int32 field_20;                     ///< zero
 	__int32 field_24;
 	__int64 field_28;                     ///< 0x1854d20 bei stustatescriptstatewait
-	///< int ref für statistics?
+	///< int ref for statistics?
 };
 
 struct StatescriptInstanceListWithId {
@@ -526,7 +530,7 @@ struct STUStatescriptGraph {
 	STUBase<STUBase_vt> base;
 	STUGraph m_graph;
 	STUBullshitListFull<STUStatescriptBase*> m_nodes;
-	STUBullshitListFull<STUStatescriptState*> m_states; // flag für m_states 0xf49a06
+	STUBullshitListFull<STUStatescriptState*> m_states; // flag for m_states 0xf49a06
 	STUBullshitListFull<STUStatescriptBase*> m_entries;
 	__int64 m_consoleCommand;
 	__int64 field_88;
