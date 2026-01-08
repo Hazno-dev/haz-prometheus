@@ -273,6 +273,7 @@ void statescript_window::render() {
                         if (arg_typ && arg_typ->assignable_to_hash(STU_NAME::STUConfigVar)) {
                             STUConfigVar* cv = *(STUConfigVar**)((__int64)node + arg->offset);
                             if (cv) {
+                                ImGui::PushID(cv);
                                 imgui_helpers::display_cv(cv, _curr_instance, arg, false);
                                 if (cv->is_expression()) {
                                     ImGui::SameLine();
@@ -280,6 +281,7 @@ void statescript_window::render() {
                                         cvexpression_viewer::get_latest_or_create(this)->display_expression((STUConfigVarExpression*)cv, _curr_instance);
                                     }
                                 }
+                                ImGui::PopID();
                             }
                         }
                     }
