@@ -56,7 +56,8 @@ class CVD_List : public window {
         }
         else if (rid->is_dictvar()) {
             StatescriptVar_Dictionary* dv = (StatescriptVar_Dictionary*)rid;
-            ImGui::Text("Missing Implementation %d", dv->items_array.item_count);
+            ImGui::Text("Dictionary (Count/Max %d/%d)", dv->items_array.item_count, dv->items_array.max);
+            ImGui::Text("Missing Implementation.");
         }
         else if (rid->is_siref()) {
             StatescriptVar_InstanceReference* si_ref = (StatescriptVar_InstanceReference*)rid;
