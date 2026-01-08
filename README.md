@@ -141,7 +141,7 @@ The most important thing is the list of MovementState in component 12. It holds 
 * Map unloading crashes the game: This is still a TODO. If you despawn your local hero and all the entities that were spawned by bypassing selective resource loading (see above), it will successfully unload the map without crashing. Just restart your game for now.
 * Icons don't show, fonts don't properly show: Download the fonts and move them into the game directory. See Usage above.
 * Lobby does not show a hero right to the buttons: TODO this is because some info is sent via JAM which you can not force modify with ViewModels.
-* No weapons visible: Setting the position and modifying Statescript shortly after spawning sometimes does not work. Need to find some way to see if the hero is already spawned or not.
+* ~~No weapons visible: Setting the position and modifying Statescript shortly after spawning sometimes does not work. Need to find some way to see if the hero is already spawned or not.~~ 💅💅
 * DVa is floating around: I have absolutely no idea. Probably because the Mecha isnt spawned.
 * Only tracer has the spawn voiceline (Cheers, Love!): VoiceLines are handled by the server and not by the client. PrometheusSystem just emulates this for Tracer, implementing this voice system is a TODO.
 * Communication wheel doesnt work: See above, VoiceSystem is server-side.
