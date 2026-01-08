@@ -7,6 +7,11 @@
 class voice_system_triggerer : public window {
 	WINDOW_DEFINE(voice_system_triggerer, "Game", "Voice System Triggerer", true);
 
+	void initialize() override
+	{
+		voice.voice_stimulus = 0xee0000000000001; //default to functional one.
+	}
+
 	inline void render() override {
 		if (open_window()) {
 			ImGui::Text("Play on local ent");
@@ -75,7 +80,6 @@ class voice_system_triggerer : public window {
 	VoiceSystem_PlayVoice voice{};
 
 	//inline void preStartInitialize() override {}
-	//inline void initialize() override {}
 };
 
 WINDOW_REGISTER(voice_system_triggerer);
