@@ -38,6 +38,19 @@ If you havent already, download the 0.8 beta from [archive.org](https://archive.
   * The patcher will write a GameClientApp.patched.exe file into the same directory. The only thing this patched executable does is load inject.dll before running the game code itself.
 * Congratulations, you're done :) Have a cookie 🍪
 
+### Linux instructions
+
+* Set the Windows verison of the Wine prefix to Windows 10.
+  * `WINEPREFIX=~/.wine64/ WINEARCH=win64 winecfg`
+* Install the .NET 8 runtime.
+  * `WINEPREFIX=~/.wine64/ WINEARCH=win64 winetricks dotnet8`
+* Install the .NET 8 desktop framework.
+  * `WINEPREFIX=~/.wine64/ WINEARCH=win64 winetricks dotnetdesktop8`
+* Select the unpatched executable.
+  * `WINEPREFIX=~/.wine64/ WINEARCH=win64 wine patcher.exe`
+* Download Proton from [GloriousEggroll](https://github.com/GloriousEggroll/proton-ge-custom) and install [umu-launcher](https://github.com/Open-Wine-Components/umu-launcher). Launch the patched executable using umu.
+  * `WINEPREFIX=~/.wine64/ WINEARCH=win64 PROTONPATH="/home/tracer/GE-Proton10-25/" umu-run GameClientApp.patched.exe`
+
 ### Optional stuff
 
 * Download the [MonaspaceXenon](https://monaspace.githubnext.com/) font and put the -regular.otf and -bold.otf in the directory of the game files.
@@ -191,7 +204,5 @@ Also dont look into the window manager. Its an abomination. You have been warned
 # 8. License and Contact
 
 MIT License. Contact me for any questions at contact@breakingbread.at or open a discussion thread <3
-
-
 
 ![prometheus logo](images/prometheus.png)
