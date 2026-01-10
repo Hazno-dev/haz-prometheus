@@ -140,7 +140,7 @@ void statescript_window::render() {
             print_node_location(node);
             ImGui::SameLine();
             imgui_helpers::display_type(stu->name_hash, false, true, true);
-            if (node->m_isState && node->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)node, globals::gameBase + STU_RTTI::STUStatescriptStateUXBase)) {
+            if (node->m_isState && node->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)node, reinterpret_cast<InheritanceInfo*>(globals::gameBase + STU_RTTI::STUStatescriptStateUXBase))) {
                 ImGui::PushFont(imgui_helpers::BoldFont);
                 ImGui::SameLine();
                 ImGui::Text("(UX)");

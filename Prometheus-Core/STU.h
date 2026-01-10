@@ -15,19 +15,19 @@
 //rtti addresses
 namespace STU_RTTI {
 	//base Types
-	const __int64 STUStatescriptGameEntry = 0x1766a50;
-	const __int64 STUStatescriptState = 0x1766e40;
-	const __int64 STUStatescriptCondition = 0x17669d0;
-	const __int64 STUStatescriptActionTerminator = 0x1766c50;
+	constexpr __int64 STUStatescriptGameEntry = 0x1766a50;
+	constexpr __int64 STUStatescriptState = 0x1766e40;
+	constexpr __int64 STUStatescriptCondition = 0x17669d0;
+	constexpr __int64 STUStatescriptActionTerminator = 0x1766c50;
 	//Auch ein StatescriptState member
-	const __int64 Unknown = 0x1766690;
+	constexpr __int64 Unknown = 0x1766690;
 
 	//Other inherits
-	const __int64 STUConfigVarDynamic = 0x17909e0;
-	const __int64 STUStatescriptOutputPlug = 0x1766bd0;
-	const __int64 STUStatescriptStateUXBase = 0x1759fb0;
+	constexpr __int64 STUConfigVarDynamic = 0x17909e0;
+	constexpr __int64 STUStatescriptOutputPlug = 0x1766bd0;
+	constexpr __int64 STUStatescriptStateUXBase = 0x1759fb0;
 
-	const __int64 teStructuredData = 0x17a37b0;
+	constexpr __int64 teStructuredData = 0x17a37b0;
 };
 
 //Name hashes

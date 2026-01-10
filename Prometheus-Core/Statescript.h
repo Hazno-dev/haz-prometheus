@@ -276,15 +276,15 @@ struct STUStatescriptBase{
 	};
 
 	StatescriptNodeType get_type() {
-		if (this->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)this, globals::gameBase + STU_RTTI::STUStatescriptGameEntry)) {
+		if (this->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)this, reinterpret_cast<InheritanceInfo*>(globals::gameBase + STU_RTTI::STUStatescriptGameEntry))) {
 			return StatescriptNodeType_Entry;
-		} else if (this->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)this, globals::gameBase + STU_RTTI::STUStatescriptActionTerminator)) {
+		} else if (this->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)this, reinterpret_cast<InheritanceInfo*>(globals::gameBase + STU_RTTI::STUStatescriptActionTerminator))) {
 			return StatescriptNodeType_Action;
-		} else if (this->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)this, globals::gameBase + STU_RTTI::STUStatescriptState)) {
+		} else if (this->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)this, reinterpret_cast<InheritanceInfo*>(globals::gameBase + STU_RTTI::STUStatescriptState))) {
 			return StatescriptNodeType_State;
-		} else if (this->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)this, globals::gameBase + STU_RTTI::STUStatescriptCondition)) {
+		} else if (this->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)this, reinterpret_cast<InheritanceInfo*>(globals::gameBase + STU_RTTI::STUStatescriptCondition))) {
 			return StatescriptNodeType_Condition;
-		} else if (this->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)this, globals::gameBase + STU_RTTI::Unknown)) {
+		} else if (this->graph_node.base.vfptr->rtti.base.rtti_assignable_to((__int64)this, reinterpret_cast<InheritanceInfo*>(globals::gameBase + STU_RTTI::Unknown))) {
 			return StatescriptNodeType_Unknown;
 		}
 		return StatescriptNodeType_Unknown;
@@ -318,7 +318,7 @@ struct STUConfigVar {
 	STUConfigVar_impl* cv_impl;
 
 	bool is_dynamic() {
-		return base.vfptr->rtti.base.rtti_assignable_to((__int64)this, globals::gameBase + STU_RTTI::STUConfigVarDynamic);
+		return base.vfptr->rtti.base.rtti_assignable_to((__int64)this, reinterpret_cast<InheritanceInfo*>(globals::gameBase + STU_RTTI::STUConfigVarDynamic));
 	}
 	
 	bool is_expression() {
