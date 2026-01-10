@@ -371,7 +371,7 @@ bool window::open_window(const char* title, int flags, ImVec2 size) {
 }
 
 void window::display_addr(__int64 addr, const char* prepend) {
-	ImGui::PushID(addr);
+	ImGui::PushID(GetUniqueHash(addr));
 	if (addr > globals::gameBase && addr - globals::gameBase < globals::gameSize) {
 		if (prepend)
 			ImGui::Text("%s: (RVA) %x", prepend, addr - globals::gameBase);
@@ -390,14 +390,14 @@ void window::display_addr(__int64 addr, const char* prepend) {
 }
 
 void window::display_text(char* text, const char* prepend) {
-	ImGui::PushID(reinterpret_cast<int64>(text) + reinterpret_cast<int64>(prepend));
+	ImGui::PushID(GetUniqueHash(reinterpret_cast<int64>(text)));
 
 	if (prepend)
 		ImGui::Text("%s: %s", prepend, text);
 	else
 		ImGui::Text("%s", text);
 
-	if (text != nullptr && ImGui::Button("Copy")) {
+	if (text != nullptr && ImGui::Button(EMOJI_COPY)) {
 		imgui_helpers::openCopyWindow(text);
 	}
 

@@ -413,3 +413,7 @@ namespace ImGui {
 		return Checkbox(label, (bool*)v);
 	}
 }
+
+#define GetUniqueHash(addr) static_cast<int32>((static_cast<uint32>(addr) + 2u 								\
+	+ (static_cast<uint32>(ImGui::TableGetRowIndex()) * static_cast<uint32>(ImGui::GetColumnIndex()))		\
+	+ ImGui::GetItemID()))

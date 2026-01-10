@@ -18,6 +18,7 @@ namespace allmighty_hash_lib {
 
 	
 	void display_hash(int hash, const char* prepend) {
+		ImGui::PushID(GetUniqueHash(hash));
 		std::unique_lock lock(mut);
 		if (prepend) {
 			ImGui::Text("%s ", prepend);
@@ -30,9 +31,10 @@ namespace allmighty_hash_lib {
 			ImGui::Text("%x", hash);
 		}
 		ImGui::SameLine();
-		if (ImGui::Button("Copy")) {
+		if (ImGui::Button(EMOJI_COPY)) {
 			imgui_helpers::openCopyWindow(hash);
 		}
+		ImGui::PopID();
 	}
 	const char* filename = "hashlibrary.json";
 	void display_component(int component_id) {
