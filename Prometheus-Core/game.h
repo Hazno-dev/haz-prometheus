@@ -45,8 +45,8 @@ struct InheritanceInfo
 
 struct InheritanceInfo_vt {
 	InheritanceInfo* (*get_inheritance)(__int64 instance);
-	bool(__fastcall* rtti_assignable_to)(__int64, __int64);
-	bool(__fastcall* rtti_instanceof)(__int64, __int64);
+	bool(__fastcall* rtti_assignable_to)(__int64,InheritanceInfo *info); //a2 = InheritanceInfo**
+	bool(__fastcall* rtti_instanceof)(__int64,InheritanceInfo *info); //a2 = InheritanceInfo**
 };
 
 /* 493 */
