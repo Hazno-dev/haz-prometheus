@@ -15,9 +15,8 @@ namespace allmighty_hash_lib {
 	std::map<int, component_info> components{};
 	std::recursive_mutex mut{};
 	bool will_save = false;
-
 	
-	void display_hash(int hash, const char* prepend) {
+	void display_hash(const int hash, const char* prepend) {
 		ImGui::PushID(GetUniqueHash(hash));
 		std::unique_lock lock(mut);
 		if (prepend) {

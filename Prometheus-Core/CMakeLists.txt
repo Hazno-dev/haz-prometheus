@@ -141,6 +141,7 @@ add_library(Prometheus-Core SHARED
         "window_manager/window_manager.cpp"
         Logs/Logs.cpp
         Logs/Logs.h
+        windows/statescript_registry.cpp
 )
 target_include_directories(Prometheus-Core PRIVATE ${PROJECT_SOURCE_DIR}/)
 
