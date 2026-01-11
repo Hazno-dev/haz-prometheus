@@ -20,3 +20,6 @@ add_custom_target("Prometheus-Patcher"
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Prometheus-Patcher
         COMMENT "Building patcher..."
 )
+
+#IDA
+add_subdirectory(Prometheus-Typing)

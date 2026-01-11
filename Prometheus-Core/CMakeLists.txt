@@ -4,15 +4,13 @@ project(Prometheus-Core
         HOMEPAGE_URL "https://github.com/BreakingBread0/prometheus"
         LANGUAGES C CXX)
 
+message("Prometheus-Core")
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(DIR_BIN ${CMAKE_BINARY_DIR}/bin/core)
 set(DIR_LIB ${CMAKE_BINARY_DIR}/lib/core)
-
-file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
-        "${PROJECT_SOURCE_DIR}/*.cpp"
-        "${PROJECT_SOURCE_DIR}/*.h")
 
 add_library(Prometheus-Core SHARED
         "entity_admin.h"

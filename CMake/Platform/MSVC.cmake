@@ -4,6 +4,7 @@ endif()
 
 set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo,Release>:ProgramDatabase>")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+set(CMAKE_SYSTEM_NAME Windows)
 
 function(Pro_ApplyPlatform TargetName)
     set(TARGET_COMPILE_OPTIONS /W0 /Gy /Oi /sdl /GS- /std:c++20 /permissive-)
@@ -21,7 +22,7 @@ function(Pro_ApplyPlatform TargetName)
         set_target_properties(${TargetName} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
     endif()
 
-    message("Compiling target: ${TargetName} with options:")
+    message("Configuring target: ${TargetName} with options:")
     message(STATUS "Linker options          : ${TARGET_LINK_OPTIONS}")
     message(STATUS "Compilation options     : ${TARGET_COMPILE_OPTIONS}")
     message(STATUS "Compilation definitions : ${TARGET_COMPILE_DEFS}")
