@@ -7,7 +7,7 @@
 class ComponentCreator
 {
     public:
-        int8            ComponentID{};
+        uint8           ComponentID{};
         void*           UnkVt{};    //IDK?
         PADDING(0x10){};
         void*           IClass{};   //StructPageAllocator
@@ -20,11 +20,4 @@ class ComponentCreator
 
     protected:
         ~ComponentCreator() = default;
-};
-
-class ComponentCreator28_STU_HEALTH_COMPONENT : public ComponentCreator
-{
-    protected:
-        ~ComponentCreator28_STU_HEALTH_COMPONENT() = default;
-        int64 Construct() override;
 };
