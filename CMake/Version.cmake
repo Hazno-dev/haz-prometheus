@@ -10,7 +10,8 @@ macro(Pro_ProjectVersion Target Major Minor Patch Tweak)
             VERSION_MAJOR=${Major}
             VERSION_MINOR=${Minor}
             VERSION_PATCH=${Patch}
-            VERSION_TWEAK=${Tweak})
+            VERSION_TWEAK=${Tweak}
+            BUILD_TYPE="${CMAKE_BUILD_TYPE}")
 
     set(    VERSION=${Major},${Minor},${Patch},${Tweak}
             VERSION_STRING="${Major}.${Minor}.${Patch}.${Tweak}"

@@ -51,6 +51,8 @@
 #include <imnodes/imnodes.cpp>
 
 #include "Logs/Logs.h"
+#include "Utility/Exception.h"
+#include "Utility/Modules.h"
 
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ImVec2, x, y);
 
@@ -1160,10 +1162,12 @@ BOOL APIENTRY DllMain(HMODULE hModule,
         case DLL_PROCESS_ATTACH:
             std::call_once(entrypoint_mutex, [] {
                 globals::ensure_console_allocated();
-                
+                Utility::Modules::Initialize();
+                Logs::Initialize(); //soz i defo shouldnt be putting this inside dllmain but like idk where else to put it rn
+
                 printf("Hello World!\n");
 
-                printf("Adding VEH: %p\n", AddVectoredExceptionHandler(true, (PVECTORED_EXCEPTION_HANDLER)VectoredExceptionHandler));
+                printf("Adding VEH: %p\n", AddVectoredExceptionHandler(true, Utility::Exception::GetExceptionHandler()));
                 globals::gameBase = (DWORD_PTR)GetModuleHandleA(nullptr);
                 globals::modBase = (DWORD_PTR)GetCurrentModule();
                 const auto pe = Pe::PeNative::fromModule(GetModuleHandleA(NULL));
@@ -1181,7 +1185,6 @@ BOOL APIENTRY DllMain(HMODULE hModule,
                 memcpy((void*)tlsCallback, TlsCallback_0, sizeof(TlsCallback_0));
 
                 MH_VERIFY(MH_Initialize());
-                Logs::Initialize(); //soz i defo shouldnt be putting this inside dllmain but like idk where else to put it rn
 
                 MH_VERIFY(MH_CreateHook(ExitProcess, ExitProcessHook, (LPVOID*)&ExitProcess_orig));
                 MH_VERIFY(MH_EnableHook(ExitProcess));
@@ -1212,6 +1215,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
                 printf("Goodbye World!\n");
                 MH_VERIFY(MH_Uninitialize());
                 Logs::Uninitialize();
+                Utility::Modules::Uninitialize();
                 });
             break;
         case DLL_THREAD_ATTACH:

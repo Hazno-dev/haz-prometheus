@@ -97,7 +97,7 @@ void player_spawner::modify_ent(spawn_info info, Entity* ent) {
 					statescript->loadScript(script->resource_id);
 
 					if (auto inst = statescript->ss_inner.getByResourceId(script->resource_id)) {
-						LOG_INFO("Successfully created weapon script: {:#x} (inst: {:#x}) with TargetID {}", script->resource_id, reinterpret_cast<int64>(inst), weaponId);
+						LOG_CORE(Info, "Successfully created weapon script: {:#x} (inst: {:#x}) with TargetID {}", script->resource_id, reinterpret_cast<int64>(inst), weaponId);
 
 						//Fix selected weapon targetIDs for weapon graphs (0xd8000000000001c)
 						const StatescriptPrimitive selectedWeaponTargetID{weaponId, StatescriptPrimitive_INT};
@@ -107,7 +107,7 @@ void player_spawner::modify_ent(spawn_info info, Entity* ent) {
 						const StatescriptPrimitive wpnDictionaryId{weaponId++, StatescriptPrimitive_INT};
 						statescript->ss_inner.rid_entity_varbag->SetArray({0x0D8000000000001D, StatescriptVar_ENTITY_VARBAG}, wpnDictionaryId, wpnDictionaryId, weaponId);
 					} else {
-						LOG_ERROR("Failed to create weapon script: {:#x}", script->resource_id);
+						LOG_CORE(Error, "Failed to create weapon script: {:#x}", script->resource_id);
 						weaponId++;
 					}
 				}

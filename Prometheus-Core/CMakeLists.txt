@@ -13,6 +13,7 @@ set(DIR_BIN ${CMAKE_BINARY_DIR}/bin/core)
 set(DIR_LIB ${CMAKE_BINARY_DIR}/lib/core)
 
 add_library(Prometheus-Core SHARED
+        "Common.h"
         "entity_admin.h"
         "ExceptionFormatter.h"
         "filetype_library.h"
@@ -114,6 +115,10 @@ add_library(Prometheus-Core SHARED
         "windows/voice_system_triggerer.h"
         "window_manager/management_window.h"
         "window_manager/window_manager.h"
+        "Logs/Logs.h"
+        "Logs/Detail.h"
+        "Logs/Formatting.h"
+        "Logs/Patterner.h"
         "dllmain.cpp"
         "entity_admin.cpp"
         "ExceptionFormatter.cpp"
@@ -137,9 +142,11 @@ add_library(Prometheus-Core SHARED
         "windows/viewmodel_write_blocker.cpp"
         "window_manager/management_window.cpp"
         "window_manager/window_manager.cpp"
-        Logs/Logs.cpp
-        Logs/Logs.h
-        windows/statescript_registry.cpp
+        "windows/statescript_registry.cpp"
+        "Logs/Logs.cpp"
+        "Logs/Detail.cpp"
+        "Utility/Modules.cpp"
+        "Utility/Exception.cpp"
 )
 target_include_directories(Prometheus-Core PRIVATE ${PROJECT_SOURCE_DIR}/)
 
